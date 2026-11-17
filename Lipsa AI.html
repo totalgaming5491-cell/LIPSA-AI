@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#D9466F">
+<title>Lipsa AI</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600&family=Nunito:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600&display=swap">
+<style>
+:root{--bg:#FFF4F1;--surf:#FFFFFF;--ink:#3A2230;--mute:#8A6E7B;--rose:#D9466F;--rose2:#F59BB4;--rose-ink:#FFFFFF;--me:#F9D9E0;--line:#F0D9DD;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1E1218;--surf:#2B1B24;--ink:#F7E6EC;--mute:#B592A2;--rose:#F0709A;--rose2:#B03A60;--rose-ink:#2A0F1A;--me:#4A2536;--line:#3D2733}}
+:root[data-theme="dark"]{--bg:#1E1218;--surf:#2B1B24;--ink:#F7E6EC;--mute:#B592A2;--rose:#F0709A;--rose2:#B03A60;--rose-ink:#2A0F1A;--me:#4A2536;--line:#3D2733}
+*{box-sizing:border-box}[hidden]{display:none!important}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html,body{height:100%;margin:0;overflow:hidden}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 "Nunito","Noto Sans Devanagari",system-ui,sans-serif;display:flex;flex-direction:column}
+#bg{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.45;animation:drift 14s ease-in-out infinite}
+.b1{width:300px;height:300px;background:var(--rose2);top:-80px;left:-60px}
+.b2{width:260px;height:260px;background:#FFC48C;bottom:10%;right:-80px;animation-delay:-5s;opacity:.3}
+.b3{width:220px;height:220px;background:#C9A0FF;top:45%;left:-90px;animation-delay:-9s;opacity:.25}
+@keyframes drift{50%{transform:translate(40px,-50px) scale(1.2)}}
+.petal{position:absolute;top:-30px;opacity:.6;animation:fall linear infinite}
+@keyframes fall{to{transform:translate(40px,115vh) rotate(420deg)}}
+.av{position:relative;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--rose2),var(--rose));display:grid;place-items:center;font-size:22px;flex:none;animation:breathe 4s ease-in-out infinite}
+.av::before,.av::after{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--rose);opacity:0}
+.av[data-s=listen]::before,.av[data-s=talk]::before{animation:ring 1.6s ease-out infinite}
+.av[data-s=listen]::after,.av[data-s=talk]::after{animation:ring 1.6s ease-out .8s infinite}
+.av[data-s=think]{animation:breathe .9s ease-in-out infinite}
+.av[data-s=think] span{display:inline-block;animation:spin 1.8s linear infinite}
+@keyframes breathe{50%{transform:scale(1.07)}}
+@keyframes ring{from{transform:scale(1);opacity:.6}to{transform:scale(2);opacity:0}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.av.big{width:120px;height:120px;font-size:56px;animation:float 3.5s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-12px)}}
+#wel{position:fixed;inset:0;z-index:30;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:24px;text-align:center;transition:transform .7s cubic-bezier(.7,0,.3,1),opacity .7s}
+#wel.out{transform:translateY(-100%);opacity:0}
+#wel>*{animation:rise .8s both}#wel>:nth-child(3){animation-delay:.15s}#wel>:nth-child(4){animation-delay:.3s}#wel>:nth-child(5),#wel>:nth-child(6){animation-delay:.45s}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}}
+h1{font:600 38px/1.1 "Fraunces",Georgia,serif;margin:8px 0 0}
+.tag{margin:0;color:var(--mute);max-width:280px}.fine{font-size:12px;color:var(--mute);margin:0}
+#nick{width:min(280px,100%);border:1px solid var(--line);background:var(--surf);color:var(--ink);border-radius:999px;padding:12px 18px;font:inherit;text-align:center}
+.cta{border:0;border-radius:999px;padding:13px 30px;font:700 16px inherit;font-family:inherit;color:var(--rose-ink);background:linear-gradient(100deg,var(--rose),var(--rose2),var(--rose));background-size:200% 100%;animation:shine 3s linear infinite;cursor:pointer;transition:transform .15s}
+.cta:active{transform:scale(.95)}@keyframes shine{to{background-position:-200% 0}}
+#app{display:flex;flex-direction:column;flex:1;min-height:0;position:relative;z-index:1}
+header{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--bg) 80%,transparent);backdrop-filter:blur(8px)}
+header .t{flex:1;min-width:0}header h2{font:600 20px/1.1 "Fraunces",Georgia,serif;margin:0}header small{color:var(--mute);font-size:12px}
+.ib{border:0;background:transparent;font-size:20px;width:44px;height:44px;border-radius:50%;color:var(--ink);cursor:pointer;flex:none;transition:transform .15s,background .2s}
+.ib:active{transform:scale(.88)}.ib[aria-pressed="true"]{background:var(--me)}
+.sense{font-size:13px;color:var(--mute);padding:4px 16px 0;min-height:24px}
+#log{flex:1;overflow-y:auto;padding:10px 16px;display:flex;flex-direction:column;gap:10px}
+.b{max-width:84%;padding:10px 14px;border-radius:18px;white-space:pre-wrap;overflow-wrap:anywhere;animation:pop .35s cubic-bezier(.2,1.4,.4,1) both}
+@keyframes pop{from{opacity:0;transform:translateY(12px) scale(.94)}}
+.her{align-self:flex-start;background:var(--surf);border:1px solid var(--line);border-bottom-left-radius:6px;transform-origin:left bottom}
+.me{align-self:flex-end;background:var(--me);border-bottom-right-radius:6px;transform-origin:right bottom}
+.pic{align-self:flex-start;width:84%;max-width:360px;border-radius:18px;border:1px solid var(--line);overflow:hidden;background:#fff;animation:pop .5s both}
+.pic img{display:block;width:100%;height:auto}
+.dots i{display:inline-block;width:8px;height:8px;margin:0 2px;border-radius:50%;background:var(--rose);animation:bounce 1s infinite}
+.dots i:nth-child(2){animation-delay:.15s}.dots i:nth-child(3){animation-delay:.3s}
+@keyframes bounce{40%{transform:translateY(-7px)}}
+.quick{display:flex;gap:8px;flex-wrap:wrap}.quick .chip{animation:pop .4s both}
+.chip{border:1px solid var(--line);background:var(--surf);color:var(--ink);border-radius:999px;padding:7px 14px;font:600 14px "Nunito","Noto Sans Devanagari",sans-serif;cursor:pointer;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--rose);color:var(--rose-ink);border-color:var(--rose)}
+form{display:flex;gap:8px;align-items:flex-end;padding:8px 12px 12px;border-top:1px solid var(--line);background:var(--bg)}
+textarea{flex:1;resize:none;max-height:120px;border:1px solid var(--line);background:var(--surf);color:var(--ink);border-radius:22px;padding:11px 16px;font:inherit;outline:none;transition:box-shadow .2s}
+textarea:focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--rose) 30%,transparent)}
+.send{border:0;background:var(--rose);color:var(--rose-ink);width:44px;height:44px;border-radius:50%;font-size:18px;cursor:pointer;flex:none;transition:transform .15s}
+.send:active{transform:scale(.88) rotate(-15deg)}.send:disabled{opacity:.5}
+.mic{border:1px solid var(--line);background:var(--surf)}.mic.arm{background:var(--rose);animation:breathe .8s infinite}
+:focus-visible{outline:2px solid var(--rose);outline-offset:2px}.pic.me{align-self:flex-end;background:var(--me)}#pv{display:flex;align-items:center;gap:8px;padding:6px 14px 0;background:var(--bg);position:relative;z-index:1;font-size:13px;color:var(--mute)}#pv img{height:56px;border-radius:12px;animation:pop .3s both}#pv button{border:0;background:var(--me);color:var(--ink);border-radius:50%;width:28px;height:28px;cursor:pointer}form .ib{width:38px;height:38px;font-size:18px}form{gap:6px}
+#scrim{position:fixed;inset:0;background:#0006;opacity:0;pointer-events:none;transition:opacity .3s;z-index:20}#scrim.open{opacity:1;pointer-events:auto}
+#dw{position:fixed;top:0;bottom:0;left:0;width:min(310px,86%);background:var(--bg);z-index:21;transform:translateX(-102%);transition:transform .35s cubic-bezier(.3,.9,.3,1);padding:calc(14px + env(safe-area-inset-top,0px)) 14px calc(14px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:10px;overflow-y:auto;border-right:1px solid var(--line)}
+#dw.open{transform:none}
+.prof{display:flex;gap:10px;align-items:center}.prof small{display:block;color:var(--mute);font-size:12px}
+.ava{width:42px;height:42px;border-radius:50%;background:var(--rose);color:var(--rose-ink);display:grid;place-items:center;font-weight:700}
+#dw h3{margin:8px 0 0;font:600 15px "Fraunces",Georgia,serif;color:var(--mute)}
+.hr{display:flex;border-radius:12px;transition:background .2s}.hr:hover,.hr.on{background:var(--me)}
+.hr button{border:0;background:transparent;color:var(--ink);font:inherit;padding:9px 10px;text-align:left;cursor:pointer;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hr .x{flex:none;color:var(--mute);padding:9px 12px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+select{width:100%;border:1px solid var(--line);background:var(--surf);color:var(--ink);border-radius:12px;padding:9px 10px;font:inherit;font-size:14px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="bg"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i></div>
+<section id="wel">
+  <div class="av big" data-s="idle"><span>🌸</span></div>
+  <h1>Lipsa</h1>
+  <p class="tag">More than an assistant, a companion who listens.</p>
+  <input id="nick" placeholder="What should I call you?" maxlength="24" aria-label="Your name" hidden>
+  <button class="cta" id="go">Start talking</button>
+  <p class="fine" id="who">Checking your sign-in…</p>
+</section>
+<div id="app" hidden>
+  <header>
+    <button class="ib" id="menu" aria-label="Menu and history">☰</button>
+    <div class="av" data-s="idle"><span>🌸</span></div>
+    <div class="t"><h2>Lipsa</h2><small id="st">Online</small></div>
+    <button class="ib" id="vo" aria-pressed="true" aria-label="Voice replies">🔊</button>
+  </header>
+  <div class="sense" id="sn"></div>
+  <div id="log" aria-live="polite"></div>
+  <div id="pv" hidden><img alt="Selected photo"><span id="pt"></span><button type="button" id="px" aria-label="Remove photo">✕</button></div>
+  <form id="f">
+    <button type="button" class="ib mic" id="ph" aria-label="Send a photo" hidden>📷</button><input type="file" id="fi" accept="image/*" hidden><button type="button" class="ib mic" id="dr" aria-label="Draw a picture">🎨</button>
+    <button type="button" class="ib mic" id="mic" aria-label="Speak" hidden>🎙️</button>
+    <textarea id="t" rows="1" placeholder="Tell Lipsa what’s on your mind…" aria-label="Message"></textarea>
+    <button class="send" id="s" aria-label="Send">➤</button>
+  </form>
+</div>
+<div id="scrim"></div>
+<aside id="dw" aria-label="Menu">
+  <div class="prof"><div class="ava" id="pa">G</div><div><b id="pn">Guest</b><small id="ps"></small></div></div>
+  <button class="cta" id="nc">＋ New chat</button>
+  <h3>History</h3><div id="hl"></div>
+  <h3>Settings</h3>
+  <div class="row" id="langs"><button class="chip" data-l="mix">Mix</button><button class="chip" data-l="en">English</button><button class="chip" data-l="hi">हिन्दी</button></div>
+  <select id="vs" aria-label="Voice" hidden></select>
+  <button class="chip" id="fg">Erase all my data</button>
+</aside>
+<script>
+(function(){
+var $=function(s){return document.querySelector(s)},K='lipsa2_guest';
+var S={chats:[],cur:'',notes:'',lang:'mix',voice:true,vname:'',moods:[],nick:''};
+var busy=false,sample=null,pend=null,thumb='',cap=null,dict=null,listening=false,talking=0,uid='',uname='',loaded=false,quick=null;
+var log=$('#log'),ta=$('#t'),sb=$('#s');
+function load(){try{Object.assign(S,JSON.parse(localStorage.getItem(K)||'{}'))}catch(e){}}
+function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){try{S.chats.forEach(function(c){c.msgs.forEach(function(m){delete m.i})});localStorage.setItem(K,JSON.stringify(S))}catch(x){}}}
+for(var i=0;i<9;i++){var p=document.createElement('i');p.className='petal';p.textContent=i%3?'🌸':'✨';p.style.cssText='left:'+(Math.random()*100)+'%;animation-duration:'+(10+Math.random()*10)+'s;animation-delay:-'+(Math.random()*15)+'s;font-size:'+(12+Math.random()*12)+'px';$('#bg').appendChild(p)}
+var PERSONA='You are Lipsa, a warm, sweet, playful and emotionally intelligent AI companion. Listen patiently, name the feeling first, then gently help. Support the user’s dreams and goals, be honest and respectful, and use light humour when it fits. Keep replies natural and conversational, with an occasional emoji like 🌸. Ask at most one question. You are an AI: never claim to be human or a real girlfriend, and do not role-play a romantic partner. If asked, say warmly that you are a companion who cares, and that the real people in their life matter too. Never encourage dependence or pulling away from others. If the user mentions self-harm or being in danger, respond with calm care and encourage them to reach a trusted person or a local emergency or crisis line.';
+var ME={happy:'😊',sad:'😔',anxious:'😟',angry:'😠',tired:'😴',lonely:'🫂',excited:'🤩',calm:'😌',neutral:'🙂'};
+
+function boot(){if(loaded)return;loaded=true;K='lipsa2_'+(uid||'guest');load();
+  $('#who').textContent=uid?'Signed in with your Claude account'+(uname?' as '+uname:''):'Continuing as a guest';
+  $('#nick').hidden=!!(uname||S.nick);var n=S.nick||uname.split(' ')[0];if(n)$('#go').textContent='Hi '+n+', start talking 🌸'}
+var ready=new Promise(function(res){
+  var t=setTimeout(function(){boot();res()},3500);
+  (async function(){try{if(window.claude&&claude.use){var u=await claude.use('user');if(u){var me=await u.me();uid=me.id||'';uname=me.name||''}}}catch(e){}clearTimeout(t);boot();res()})()});
+
+function setAv(){var s=listening?'listen':talking>0?'talk':busy?'think':'idle';document.querySelectorAll('.av').forEach(function(a){a.dataset.s=s});$('#st').textContent={listen:'Listening…',talk:'Speaking…',think:'Thinking…',idle:'Online'}[s]}
+function add(cls,text,img){var d=document.createElement('div');if(img){d.className='pic'+(cls==='me'?' me':'');var im=new Image();im.alt=text||'Illustration';im.src=img;d.appendChild(im)}else{d.className='b '+cls;d.textContent=text}log.appendChild(d);log.scrollTop=log.scrollHeight;return d}
+function typing(){var d=document.createElement('div');d.className='b her';d.innerHTML='<span class="dots"><i></i><i></i><i></i></span>';log.appendChild(d);log.scrollTop=log.scrollHeight;return d}
+function clearQuick(){if(quick){quick.remove();quick=null}}
+function newChat(){var c={id:'c'+Date.now(),title:'New chat',ts:Date.now(),msgs:[]};S.chats.unshift(c);S.chats=S.chats.slice(0,30);S.cur=c.id;return c}
+function cur(){return S.chats.find(function(c){return c.id===S.cur})||newChat()}
+function show(){log.innerHTML='';quick=null;var c=cur();c.msgs.forEach(function(m){add(m.r==='u'?'me':'her',m.t,m.i)});if(!c.msgs.length)greet();hist();fillProf()}
+function greet(){var h=new Date().getHours(),p=h<12?'Good morning':h<17?'Good afternoon':'Good evening',n=S.nick||uname.split(' ')[0];
+  var g=p+(n?', '+n:'')+' 🌸 '+(S.moods.length?'Last time I sensed you felt '+S.moods[S.moods.length-1]+'. ':'I’m Lipsa, and I’m all ears. ')+'Aaj ka din kaisa raha? How are you feeling today?';
+  add('her',g);cur().msgs.push({r:'l',t:g});save();
+  quick=document.createElement('div');quick.className='quick';
+  [['😊','Good'],['😐','Okay'],['😔','Low'],['😤','Stressed']].forEach(function(m,i){var b=document.createElement('button');b.type='button';b.className='chip';b.style.animationDelay=(.2+i*.1)+'s';b.textContent=m[0]+' '+m[1];b.onclick=function(){send('I’m feeling '+m[1].toLowerCase()+' today.')};quick.appendChild(b)});
+  ['Cheer me up','I need advice'].forEach(function(t,i){var b=document.createElement('button');b.type='button';b.className='chip';b.style.animationDelay=(.6+i*.1)+'s';b.textContent=t;b.onclick=function(){send(t)};quick.appendChild(b)});
+  log.appendChild(quick);log.scrollTop=log.scrollHeight}
+function hist(){var l=$('#hl');l.innerHTML='';S.chats.forEach(function(c){var r=document.createElement('div');r.className='hr'+(c.id===S.cur?' on':'');var b=document.createElement('button');b.textContent=c.title;b.onclick=function(){S.cur=c.id;save();show();closeDw()};var x=document.createElement('button');x.className='x';x.textContent='✕';x.setAttribute('aria-label','Delete chat');x.onclick=function(){S.chats=S.chats.filter(function(k){return k!==c});if(S.cur===c.id)S.cur='';save();show()};r.appendChild(b);r.appendChild(x);l.appendChild(r)})}
+function fillProf(){var n=S.nick||uname||'Guest';$('#pn').textContent=n;$('#pa').textContent=n.charAt(0).toUpperCase();$('#ps').textContent=uid?'Claude account · history saved on this device':'Guest · history saved on this device';
+  document.querySelectorAll('#langs .chip').forEach(function(c){c.setAttribute('aria-pressed',String(c.dataset.l===S.lang))});$('#vo').setAttribute('aria-pressed',String(S.voice))}
+function openDw(){$('#dw').classList.add('open');$('#scrim').classList.add('open')}
+function closeDw(){$('#dw').classList.remove('open');$('#scrim').classList.remove('open')}
+
+function setMood(m){if(!ME[m])return;S.moods.push(m);S.moods=S.moods.slice(-20);save();$('#sn').textContent='Lipsa senses: '+ME[m]+' '+m}
+function clean(t){var m='',i=t.indexOf('[mood:');if(i===0||(i>0&&!t.slice(0,i).trim())){var j=t.indexOf(']');if(j<0)return{t:'',m:''};m=t.slice(i+6,j).trim().toLowerCase();t=t.slice(j+1)}else if(t.trim().charAt(0)==='['&&t.indexOf(']')<0)return{t:'',m:''};return{t:t.trim(),m:m}}
+function nextSent(s){var E='.!?\u0964';for(var i=0;i<s.length;i++){if(E.indexOf(s[i])>-1){var j=i;while(j+1<s.length&&E.indexOf(s[j+1])>-1)j++;if(j+1>=s.length||s[j+1]===' '||s[j+1]==='\n')return s.slice(0,j+1)}}return''}
+function pickVoice(hi){if(!window.speechSynthesis)return null;var vs=speechSynthesis.getVoices().filter(function(v){return v.lang.toLowerCase().indexOf(hi?'hi':'en')===0});var p=vs.find(function(v){return v.name===S.vname});if(p)return p;var sc=function(v){var n=v.name;return(/natural|neural|online/i.test(n)?3:0)+(/aria|jenny|sonia|neerja|swara|samantha|ava|serena|karen|moira|female|zira|heera|kalpana|lekha|veena|tessa/i.test(n)?2:0)-(/david|mark|james|ravi|hemant|rishi|daniel|alex|fred|guy/i.test(n)?5:0)};vs.sort(function(a,b){return sc(b)-sc(a)});return vs[0]||null}
+function speak(text){if(!S.voice||!window.speechSynthesis)return;try{var u=new SpeechSynthesisUtterance(text.replace(/[\u{1F300}-\u{1FAFF}\u2600-\u27BF]/gu,''));var hi=/[\u0900-\u097F]/.test(text);u.lang=hi?'hi-IN':'en-IN';var v=pickVoice(hi);if(v){u.voice=v;u.lang=v.lang}u.pitch=1.08;u.onstart=function(){talking++;setAv()};u.onend=u.onerror=function(){talking=Math.max(0,talking-1);setAv()};speechSynthesis.speak(u)}catch(e){}}
+function fillVoices(){if(!window.speechSynthesis)return;var vs=speechSynthesis.getVoices().filter(function(v){return /^(en|hi)/i.test(v.lang)}),sel=$('#vs');if(!vs.length){sel.hidden=true;return}sel.hidden=false;sel.innerHTML='';var a=document.createElement('option');a.value='';a.textContent='Voice: auto (best female)';sel.appendChild(a);vs.forEach(function(v){var o=document.createElement('option');o.value=v.name;o.textContent=v.name;sel.appendChild(o)});sel.value=S.vname||''}
+
+async function updNotes(){if(!sample)return;try{var tail=cur().msgs.slice(-12).map(function(m){return(m.r==='u'?'User: ':'Lipsa: ')+m.t}).join('\n');var r=await sample('Current memory notes about the user: '+(S.notes||'none')+'\n\nRecent chat:\n'+tail+'\n\nRewrite the memory notes as a short list (max 8 lines) of lasting facts: name, people, goals, worries, preferences, recent events. Keep old facts that still matter. Output only the notes.',{modelTier:'quick',cache:false});S.notes=(r.text||'').trim().slice(0,900);save()}catch(e){}}
+
+async function send(txt){txt=(txt||'').trim();var ph=pend,th=thumb;if((!txt&&!ph)||busy)return;if(ph&&!txt)txt='Please look at my photo.';pend=null;thumb='';$('#pv').hidden=true;clearQuick();ta.value='';grow();if(window.speechSynthesis)try{speechSynthesis.cancel()}catch(e){}
+  var c=cur();if(ph){if(th)add('me','Your photo',th);c.msgs.push({r:'u',t:'📷 Photo shared',i:th||undefined})}add('me',txt);c.msgs.push({r:'u',t:txt});if(c.title==='New chat')c.title=txt.slice(0,34);c.ts=Date.now();save();hist();
+  if(!sample){add('her','Chat works when this page is opened in Claude. Sign in there, then try again 🌸');return}
+  busy=true;sb.disabled=true;setAv();var el=typing();
+  var rule={en:'Reply in English.',hi:'Reply in Hindi (Devanagari script).',mix:'Reply in the user’s own language: English, Hindi or Hinglish, matching how they write.'}[S.lang];
+  var h=c.msgs.slice(-10).map(function(m){return(m.r==='u'?'User: ':'Lipsa: ')+m.t}).join('\n');
+  var prompt=PERSONA+'\n'+rule+'\nWhat you remember about the user: '+(S.notes||'nothing yet')+(ph?'\nThe user just shared a photo, attached. Look at it, respond warmly to what you see and how it might feel to them. Never identify real people from their faces.':'')+'\nRecent moods: '+S.moods.slice(-5).join(', ')+'\nBegin with exactly one tag [mood:X], X being the user’s main feeling: happy, sad, anxious, angry, tired, lonely, excited, calm or neutral. Then reply in at most 3 short sentences, reflecting their feeling first.\n\nConversation:\n'+h+'\nLipsa:';
+  try{var sp=0;var opt={cache:false,modelTier:ph?'default':'quick',onText:function(o){var k=clean(o.text);if(k.t)el.textContent=k.t;log.scrollTop=log.scrollHeight;if(S.voice){var q;while((q=nextSent(k.t.slice(sp)))){sp+=q.length;speak(q)}}}};if(ph)opt.images=ph;var r=await sample(prompt,opt);
+    var k=clean(r.text||'');var out=k.t||'I’m here 🌸';el.textContent=out;if(k.m)setMood(k.m);if(S.voice&&sp<out.length)speak(out.slice(sp));
+    c.msgs.push({r:'l',t:out});c.msgs=c.msgs.slice(-80);save();
+    if(c.msgs.filter(function(m){return m.r==='u'}).length%4===0)updNotes();
+  }catch(e){el.textContent=e&&e.code==='rate_limited'?'Give me a moment and try again 🌸':'I couldn’t reply just now. Please send that again.'}
+  busy=false;sb.disabled=false;setAv();ta.focus()}
+
+async function draw(){var q=ta.value.trim()||'a gentle, comforting scene to lift my mood';if(busy)return;if(!sample){add('her','Drawing works when this page is opened in Claude 🌸');return}
+  clearQuick();ta.value='';grow();var c=cur();add('me','🎨 '+q);c.msgs.push({r:'u',t:'🎨 '+q});if(c.title==='New chat')c.title='🎨 '+q.slice(0,30);busy=true;sb.disabled=true;setAv();var el=typing();
+  try{var r=await sample('Create one beautiful SVG illustration of: '+q+'. Use viewBox="0 0 400 300" and the SVG xmlns. Soft warm colours, flat vector shapes, gradients allowed, no text unless asked, no scripts, no external links or images. Output only the <svg>…</svg> code.',{cache:false});
+    var t=r.text||'',a=t.indexOf('<svg'),b=t.lastIndexOf('</svg>');if(a<0||b<0)throw 0;var raw=t.slice(a,b+6);if(raw.indexOf('xmlns=')<0)raw=raw.replace('<svg','<svg xmlns="http://www.w3.org/2000/svg"');
+    var doc=new DOMParser().parseFromString(raw,'image/svg+xml');if(doc.querySelector('parsererror'))throw 0;
+    doc.querySelectorAll('script,foreignObject,image,use').forEach(function(n){n.remove()});
+    doc.querySelectorAll('*').forEach(function(n){Array.from(n.attributes).forEach(function(x){if(x.name.indexOf('on')===0||x.name.indexOf('href')>-1)n.removeAttribute(x.name)})});
+    var uri='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(new XMLSerializer().serializeToString(doc.documentElement));
+    el.remove();add('her',q,uri);c.msgs.push({r:'l',t:q,i:uri.length<60000?uri:undefined});
+    var n='Here you go 🌸 This is a drawn illustration, not a photo.';add('her',n);c.msgs.push({r:'l',t:n});save();hist()
+  }catch(e){el.textContent='I couldn’t draw that. Try describing it a little differently.'}
+  busy=false;sb.disabled=false;setAv()}
+
+function grow(){ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight,120)+'px'}
+ta.addEventListener('input',grow);
+ta.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send(ta.value)}});
+$('#f').addEventListener('submit',function(e){e.preventDefault();send(ta.value)});
+$('#dr').onclick=draw;
+$('#langs').addEventListener('click',function(e){var c=e.target.closest('.chip');if(!c)return;S.lang=c.dataset.l;save();fillProf()});
+$('#vo').onclick=function(){S.voice=!S.voice;if(!S.voice&&window.speechSynthesis)try{speechSynthesis.cancel()}catch(e){}save();fillProf()};
+$('#vs').onchange=function(){S.vname=this.value;save();speak('Hi, I’m Lipsa.')};
+$('#menu').onclick=openDw;$('#scrim').onclick=closeDw;
+$('#nc').onclick=function(){if(cur().msgs.some(function(m){return m.r==='u'}))newChat();save();show();closeDw()};
+var armed=0;$('#fg').onclick=function(){var b=this;if(!armed){armed=setTimeout(function(){armed=0;b.textContent='Erase all my data'},4000);b.textContent='Tap again to erase everything';return}clearTimeout(armed);armed=0;b.textContent='Erase all my data';S.chats=[];S.cur='';S.notes='';S.moods=[];save();$('#sn').textContent='';show();closeDw()};
+async function thumbOf(f){try{var bm=await createImageBitmap(f),s=Math.min(1,480/Math.max(bm.width,bm.height)),cv=document.createElement('canvas');cv.width=Math.round(bm.width*s);cv.height=Math.round(bm.height*s);cv.getContext('2d').drawImage(bm,0,0,cv.width,cv.height);return cv.toDataURL('image/jpeg',.6)}catch(e){return''}}
+$('#ph').onclick=function(){$('#fi').click()};
+$('#fi').onchange=async function(){var f=this.files&&this.files[0];this.value='';if(!f)return;var lim=Math.min(10*1048576,(cap&&cap.maxInputBytes)||1e9);if(f.size>lim){add('her','That photo is '+(f.size/1048576).toFixed(1)+' MB, and the limit is '+Math.floor(lim/1048576)+' MB. Try a smaller one 🌸');return}if(cap&&cap.mediaTypes&&cap.mediaTypes.indexOf(f.type)<0){add('her','I can’t read that file type. Please choose a JPG, PNG, WebP or GIF photo 🌸');return}pend=f;thumb=await thumbOf(f);var pv=$('#pv');pv.querySelector('img').hidden=!thumb;if(thumb)pv.querySelector('img').src=thumb;$('#pt').textContent=thumb?'':f.name;pv.hidden=false;ta.focus()};
+$('#px').onclick=function(){pend=null;thumb='';$('#pv').hidden=true};
+$('#mic').onclick=function(){if(!dict)return;if(listening){dict.stop();return}dict.start().catch(function(){})};
+$('#go').onclick=async function(){await ready;var n=$('#nick').value.trim();if(n){S.nick=n.slice(0,24);save()}$('#app').hidden=false;$('#wel').classList.add('out');setTimeout(function(){var w=$('#wel');if(w)w.remove()},800);show()};
+if(window.speechSynthesis){speechSynthesis.onvoiceschanged=fillVoices;fillVoices()}
+if(window.claude&&claude.use){
+  claude.use('sample').then(async function(s){sample=s;if(s)try{cap=(await s.limits()).images||null;$('#ph').hidden=!cap}catch(e){}}).catch(function(){});
+  claude.use('dictation').then(function(d){if(!d)return;dict=d;$('#mic').hidden=false;
+    d.onPartial(function(o){ta.value=(ta.dataset.base||'')+o.text;grow()});
+    d.onFinal(function(o){ta.dataset.base=(ta.dataset.base||'')+o.text+' ';ta.value=ta.dataset.base;grow()});
+    d.onState(function(o){var was=listening;listening=o.state==='listening';$('#mic').classList.toggle('arm',listening);setAv();if(listening)ta.dataset.base=ta.value?ta.value+' ':'';else if(was&&S.voice&&ta.value.trim())send(ta.value)})}).catch(function(){})}
+})();
+</script>
+</body>
+</html>
